@@ -10,11 +10,15 @@ namespace InstaPhoto
     public static class Program
     {
         private static readonly string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        private static readonly string InDirectory = Path.Combine(BaseDirectory, "in");
+        private static readonly string OutDirectory = Path.Combine(BaseDirectory, "out");
 
         public static void Main()
         {
-            var files = Directory.EnumerateFiles(Path.Combine(BaseDirectory, "in")).ToArray();
+            var files = Directory.EnumerateFiles(InDirectory).ToArray();
             
+            Directory.CreateDirectory(OutDirectory);
+
             for (var i = 0; i < files.Length; i+=2)
             {
                 using var file1 = Image.FromFile(files.ElementAt(i));
@@ -26,7 +30,7 @@ namespace InstaPhoto
                 g.DrawImage(file1, 0, 71, 866, 1024);
                 g.DrawImage(file2, 884, 71, 866, 1024);
 
-                result.Save(Path.Combine(BaseDirectory, $"{i}{i+1}.png"));
+                result.Save(Path.Combine(OutDirectory, $"{i}{i+1}.png"));
             }
         }
     }
